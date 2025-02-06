@@ -1,1 +1,2 @@
 # Hi-Coatis
+we developed Hi-Coatis (High-throughput Capture of Actively Transcribed Region-Interacting Sequences), a novel chromatin conformation capture technology that seamlessly integrates the detection of active transcription signals with three-dimensional chromatin interaction studies. Hi-Coatis operates without antibodies or probes, enabling low-input cells experiments with high resolution and robustness, capturing more than 93% of expressed genes and over 60,000 regulatory loci. 
