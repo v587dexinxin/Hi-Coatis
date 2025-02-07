@@ -1,10 +1,20 @@
-
-##########
+##########Heatmap plot of peak intensity in gene regions using different methods.
 computeMatrix scale-regions --regionsFileName /scratch/2023-12-11/bio-shenw/ref/Human/annotation/hg38.ncbiRefSeq/hg38.ncbiRefSeq.bed --scoreFileName ../../K562_0.1_FA/one-dimensional/mapping/all_reps/K562_0.1FA_allreps_RPKM_10bp.bw ../../../../literature/K562/PRO_seq/hg38/mapping/K562_PRO_seq_SRR8137173_10bp.bw ../../../../literature/K562/R_chip/mapping/bam2/K562_D210N_V5ChIP_SRR5379780_Rep1_RPKM_10bp.bw ../../../../literature/K562/ChIP_seq/hg38/K562_POLR2A_hg38_ENCFF124WLE.bigWig --outFileNameMatrix TSS_TES_outFileNameMatrix --regionBodyLength 6000 --beforeRegionStartLength 3000 --afterRegionStartLength 3000 --startLabel TSS --endLabel TES --skipZeros --numberOfProcessors 20 --outFileName TSS_TES_plotMatrix.gz
-
-
-
 plotHeatmap -m TSS_TES_plotMatrix.gz -out K562_0.1FA_PRO_RChip_RNAP2A_TSS_TES.pdf --heatmapHeight 15 --startLabel TSS --endLabel TES --plotFileFormat pdf  --regionsLabel all_genes --samplesLabel 0.1FA PRO-seq RChIP Pol2A --colorList white,red 
-
-
 plotHeatmap -m TSS_TES_plotMatrix_norm_1.gz -out K562_0.1FA_PRO_RChip_RNAP2A_TSS_TES_norm_1.pdf --heatmapHeight 15 --startLabel TSS --endLabel TES --plotFileFormat pdf  --regionsLabel all_genes --samplesLabel 0.1FA PRO-seq RChIP Pol2A --colorList white,red --zMax 300 --yMax 400 --averageTypeSummaryPlot mean
+
+##########Heatmap comparison of peak intensity between Hi-Coatis and ChIP-seqs.
+computeMatrix reference-point -S ../../../../K562_0.1_FA/one-dimensional/mapping/all_reps/K562_0.1FA_allreps_RPKM_10bp.bw ../../../../../../literature/K562/ChIP_seq/hg38/K562_ATAC-seq_hg38_ENCFF754EAC.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K27ac_hg38_ENCFF381NDD.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_CTCF_hg38_ENCFF682MFJ.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_EP300_hg38_ENCFF636VVR.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K27me3_hg38_ENCFF242ENK.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K4me3_hg38_ENCFF253TOF.bigWig ../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K9me3_hg38_ENCFF601JGK.bigWig -R ../../../../K562_0.1_FA/one-dimensional/macs2/common_union/K562_0.1FA_onedimensional_q0.05_common_peaks.narrowPeak --referencePoint center -a 2000 -b 2000 -out K562_0.1FA_VS_ChIP_union.gz --skipZeros --missingDataAsZero --numberOfProcessors 20
+plotHeatmap -m K562_0.1FA_VS_ChIP_union.gz -out K562_VS_ChIPs.pdf --heatmapHeight 15 --refPointLabel peaks_center  --regionsLabel 0.1FA_peaks --samplesLabel 0.1FA ATAC H3K27ac CTCF EP300 H3K27me3 H3K4me3 H3K9me3 --colorList white,red
+plotHeatmap -m K562_0.1FA_VS_ChIP_union_normrpc.gz -out K562_VS_ChIPs_norm.pdf --heatmapHeight 15 --refPointLabel peaks_center  --regionsLabel 0.1FA_peaks --samplesLabel 0.1FA ATAC H3K27ac CTCF EP300 H3K27me3 H3K4me3 H3K9me3 --colorList white,red
+
+
+###########Heatmap comparison of peak intensity between Hi-Coatis and ChIP-seqs in Repetitive_CNV regions
+computeMatrix reference-point -S ../../../../../K562_0.1_FA/one-dimensional/mapping/all_reps/K562_0.1FA_allreps_RPKM_10bp.bw ../../../../../../../literature/K562/ChIP_seq/hg38/K562_ATAC-seq_hg38_ENCFF754EAC.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_CTCF_hg38_ENCFF682MFJ.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_EP300_hg38_ENCFF636VVR.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K27ac_hg38_ENCFF381NDD.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K4me3_hg38_ENCFF253TOF.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K27me3_hg38_ENCFF242ENK.bigWig ../../../../../../../literature/K562/ChIP_seq/hg38/K562_H3K9me3_hg38_ENCFF601JGK.bigWig -R ../Coatis_14_15_Repetitive_CNV_peaks.bed --referencePoint center -a 2000 -b 2000 -out K562_Repetitive_CNV_union.gz --skipZeros --missingDataAsZero
+plotHeatmap -m K562_Repetitive_CNV_union.gz -out K562_0.1FA_Repetitive_CNV_signals_heatmap.pdf --heatmapHeight 15 --refPointLabel peaks_center  --regionsLabel union_peaks --samplesLabel Coatis ATAC CTCF EP300 H3K27ac H3K4me3 H3K27me3 H3K9me3 --colorList white,red
+
+
+
+
+
+
