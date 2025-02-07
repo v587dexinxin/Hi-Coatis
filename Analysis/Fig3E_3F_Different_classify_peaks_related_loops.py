@@ -126,3 +126,145 @@ plt.tight_layout()
 
 # 显示图表
 plt.show()
+
+
+
+#####################loops Anno related respective level genes
+loops_num = {}    
+for k in keys:
+    print (k)
+    loops_num[k] = []
+    
+    
+    for g in chrom:
+        tmp_peaks = classify[k][classify[k]['chr'] == g]
+        tmp_loops = loops[loops['chr1'] == g]
+        tmp_gene = gene_exp_df[gene_exp_df['Chr'] == g]
+        for i in tmp_peaks.index:
+            start = tmp_peaks.loc[i]['start']
+            end = tmp_peaks.loc[i]['end']
+            mask1 = (start <= tmp_loops['end1']) & (end >= tmp_loops['start1'])
+            mask2 = (start <= tmp_loops['end2']) & (end >= tmp_loops['start2'])
+            overlap1 = tmp_loops[mask1]
+            overlap2 = tmp_loops[mask2]
+            r_gene = [] ; l_gene = []
+            if len(overlap1) != 0:
+                for j in overlap1.index:
+                    l_s = overlap1.loc[j]['start2']
+                    l_e = overlap1.loc[j]['end2']
+                    mask3 = (l_s <= tmp_gene['pend']) & (l_e >= tmp_gene['pstart'])
+                    overlap3 = tmp_gene[mask3]
+                    r_gene.extend(list(overlap3['Gene_Name']))
+            if len(overlap2) != 0:  
+                for j in overlap2.index:
+                    l_s = overlap2.loc[j]['start1']
+                    l_e = overlap2.loc[j]['end1']
+                    mask4 = (l_s <= tmp_gene['pend']) & (l_e >= tmp_gene['pstart'])
+                    overlap4 = tmp_gene[mask4]
+                    l_gene.extend(list(overlap4['Gene_Name']))
+            genes = list(set(l_gene + r_gene))
+            loops_num[k].append(genes)
+                
+                    
+
+
+###############boxplots        
+            
+# 原始字典数据
+genes_num = {}        
+        
+for i in ['all', 'no_expressed', 'low_expressed', 'middle_expressed', 'high_expressed']:
+    g_name = Genes_name[i]
+    genes_num[i] = {}
+    for j in loops_num:
+        genes_num[i][j] = []
+        tmp_num = loops_num[j]
+        for k in tmp_num:
+            n = 0
+            for l in k:
+                if l in g_name:
+                    n += 1
+            if n != 0:
+                genes_num[i][j].append(n)
+
+
+
+
+# 转换为适合绘图的长格式 DataFrame
+df = pd.DataFrame.from_dict(genes_num, orient="index").stack().reset_index()
+df.columns = ["Group", "Category", "Value"]
+df = df.explode("Value")  # 将列表展开为单独的行
+df["Value"] = df["Value"].astype(float)  # 确保值为数值类型
+
+# 绘制箱线图
+plt.figure(figsize=(8, 6))
+sns.boxplot(x="Category", y="Value", hue="Group", data=df, palette="Set2" , showfliers=False)
+plt.title("Boxplot for Dictionary Data", fontsize=16)
+plt.xticks(rotation=45)
+plt.xlabel("Category", fontsize=12)
+plt.ylabel("Value", fontsize=12)
+plt.legend(title="Group")
+plt.tight_layout()
+plt.show()
+
+
+plt.savefig('')
+
+
+
+                    
+            
+############sns barplots
+matrix = []
+for level in ['no_expressed' , 'low_expressed' , 'middle_expressed' , 'high_expressed']:
+    matrix.append([])
+    o_num = genes_num[level]
+    for anno in keys:
+        sum_genes = sum(o_num[anno])
+        matrix[-1].append(sum_genes)
+
+        
+matrix = pd.DataFrame(matrix)
+matrix.columns = keys        
+matrix.index = ['no_expressed' , 'low_expressed' , 'middle_expressed' , 'high_expressed']      
+
+
+for c in ['no_expressed' , 'low_expressed' , 'middle_expressed' , 'high_expressed']:
+    matrix.loc[c] /= len(Genes_name[c])
+    
+for c in keys:
+    matrix[c] /= len(classify[c])
+    
+    
+
+
+
+# 转换为适合绘图的长格式
+df_long = matrix.reset_index().melt(id_vars="index", var_name="Category", value_name="Value")
+
+# 绘制柱状图
+plt.figure(figsize=(10, 6))
+sns.barplot(data=df_long, x="Category", y="Value", hue="index", palette="viridis")
+plt.title("Barplot Categorized by Expression Levels", fontsize=16)
+plt.xlabel("HMM Chromatin State Categories", fontsize=12)
+plt.ylabel("Average loops number", fontsize=12)
+plt.legend(title="Expression Levels")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+        
+plt.savefig('H:\\work\\niulongjian\\HiRPC_processed_data\\plots\\plots_New_number_bylxx_xjs\\K562_loops_Anno\\Anno_peaks_related_average_loops_number_barplots.pdf')
+    
+    
+    
+
+
+
+
+
+
+
+
+
