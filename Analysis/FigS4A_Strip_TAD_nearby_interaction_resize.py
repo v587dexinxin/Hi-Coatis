@@ -240,11 +240,12 @@ RPC = cooler.Cooler("/scratch/2024-05-06/bio-shenw/Ljniu/K562/matrix/cool/K562_R
 RPC_m = Get_nan_zero_Matrix(RPC)
 PolII = cooler.Cooler("/scratch/2024-05-06/bio-shenw/Ljniu/K562/matrix/cool/K562_RNAPII_chiaPET/K562_RNAPII_ChIA-PET_hg38_ENCFF582UXM_balanced.mcool::/resolutions/10000")
 PolII_m = Get_nan_zero_Matrix(PolII)
-hichip = cooler.Cooler("/scratch/2024-05-06/bio-shenw/literature/K562/HiChIP/hg38/workspace/results/coolers_library_group/K562_HiChIP_H3K27ac.hg38.mapq_30.1000.mcool::/resolutions/10000")
-hichip_m =  Get_nan_zero_Matrix(hichip)
+insituhic = cooler.Cooler('/scratch/2024-10-21/bio-shenw/Ljniu/K562/matrix/cool/K562_in_situHiC/K562_in_situHiC_balanced.mcool::/resolutions/10000')
+insitu_m = Get_nan_zero_Matrix(insituhic)
+
 HiC_Data = {'RPC':RPC_m ,
             'RNAPolII':PolII_m , 
-            'HiChIP':hichip_m}
+            'insitu_HiC':insitu_m}
 
  
 
@@ -282,7 +283,7 @@ for s in strip_tads:
 
 strip_side = 'left'
  
-cells = ['RPC' , 'RNAPolII' , 'HiChIP']
+cells = ['RPC' , 'RNAPolII' , 'insitu_HiC']
 # IS_data = []
 for c in cells:
     HiC_Lib = HiC_Data[c]
@@ -303,7 +304,7 @@ for c in cells:
 
 strip_side = 'right'
  
-cells = ['RPC' , 'RNAPolII' , 'HiChIP']
+cells = ['RPC' , 'RNAPolII' , 'insitu_HiC']
 IS_data = []
 for c in cells:
     HiC_Lib = HiC_Data[c]
