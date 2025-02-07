@@ -314,8 +314,14 @@ fig1 = Insulation_Plot(IS_data)
 run_Plot(fig1, '/scratch/2024-05-06/bio-shenw/Ljniu/K562/plots/Fig3B_strip_Loop_heatmapplot/K562_TADs_' + strip_side + '_IS_lineplots.pdf')
 
 
-   
-   
+
+
+
+
+##########Strip TAD command line
+stripenn compute --cool ../../../../matrix/cool/K562_RPC_0.1FA/Combined_562_0.1FA_merged5_.hg38.mapq_30.1000_balanced.mcool::resolutions/10000 --out Strip_10K -k chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX -m 0.95,0.96,0.97,0.98,0.99 --numcores 20 --pvalue 0.05
+
+
    
    
    
